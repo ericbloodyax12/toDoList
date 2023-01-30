@@ -1,0 +1,25 @@
+ul {
+margin: 0px;
+
+}
+.error {
+    border: red 1px solid;
+
+}
+
+.errorMessage {
+    color: red;
+    position: absolute;
+}
+
+.ToDoListConteyner {
+    position: relative;
+}
+.todos{
+    background-color: antiquewhite;
+    border: 1px solid black;
+    margin: 30px 10px  0px 10px ;
+}
+.buttons-contener {
+    margin: 0px 20px;
+}
