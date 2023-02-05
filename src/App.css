@@ -1,8 +1,14 @@
-.App {
+.todoLists-container {
   padding: 30px;
   display: flex;
 }
 
-.App > div {
+.todoLists-container > div {
   margin-right: 50px;
+}
+
+.todoLists-container__add-button{
+  position: absolute;
+  right: 20px;
+
 }

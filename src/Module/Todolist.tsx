@@ -1,5 +1,5 @@
 import React, {ChangeEvent, ChangeEventHandler, KeyboardEvent, MouseEventHandler, useState} from 'react';
-import {FilterValuesType} from '../App';
+import {FilterValuesType, TodolistType} from '../App';
 import './ToDolistModule.css'
 
 //  React.MouseEvent<HTMLElement>
@@ -11,13 +11,15 @@ export type TaskType = {
 }
 
 type PropsType = {
+    todoLists:Array<TodolistType>
+    setTodoLists:(todoLists:Array<TodolistType>) => void
     title: string
     todolistID:string
     tasks: Array<TaskType>
     removeTask: (todolistID:string,taskId: string) => void
     changeFilter: (todolistID:string,value: FilterValuesType) => void
     addTask: (todolistID:string,title: string) => void
-    changeStatus: (taskId:string,eventStatus:boolean)=> void
+    changeStatus: (todolistID:string,taskId:string,eventStatus:boolean)=> void
     filter: FilterValuesType
 }
 
@@ -52,12 +54,15 @@ export function Todolist(props: PropsType) {
 
 
 
+    const deleteTodoListHandler = (e:React.MouseEvent<HTMLElement>) => {
+        props.setTodoLists(props.todoLists.filter((todoList) => todoList.id !== props.todolistID))
+    }
     const onAllClickHandler = () => props.changeFilter(props.todolistID,"all");
     const onActiveClickHandler = () => props.changeFilter(props.todolistID,"active");
     const onCompletedClickHandler = () => props.changeFilter(props.todolistID,"completed");
 
-    return <div className="ToDoListConteyner">
-        <h3>{props.title}</h3>
+    return <div className="ToDoListContainer">
+        <h3>{props.title}<button onClick={deleteTodoListHandler}>X</button></h3>
         <div>
             <input value={title}
                    onChange={ onChangeHandler }
@@ -75,7 +80,7 @@ export function Todolist(props: PropsType) {
 
                     const onClickHandler = () => props.removeTask(props.todolistID,t.id)
                     const changeStatusHandler = (event: ChangeEvent<HTMLInputElement>) => {
-                        props.changeStatus(t.id,event.currentTarget.checked)
+                        props.changeStatus(props.todolistID,t.id,event.currentTarget.checked)
                     }
 
                     return <li key={t.id}>
@@ -87,7 +92,7 @@ export function Todolist(props: PropsType) {
             }
         </ul>
         </div>
-        <div className="buttons-contener">
+        <div className="buttons-container">
             <button onClick={ onAllClickHandler }>All</button>
             <button onClick={ onActiveClickHandler }>Active</button>
             <button onClick={ onCompletedClickHandler }>Completed</button>
