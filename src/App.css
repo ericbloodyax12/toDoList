@@ -9,6 +9,6 @@
 
 .todoLists-container__add-button{
   position: absolute;
-  right: 20px;
-
+  left: 10px;
+  top:10px;
 }

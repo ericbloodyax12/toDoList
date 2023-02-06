@@ -48,6 +48,11 @@ function App() {
     function changeFilter(todolistID:string,value: FilterValuesType) {
         setTodoLists(todoLists.map(el=>el.id===todolistID?{...el,filter:value}:el))
     }
+    function deleteTodoList (todolistID:string) {
+        setTodoLists(todoLists.filter((td)=> td.id!==todolistID))
+        delete tasks[todolistID]
+        console.log(tasks)
+    }
 
 
     function addToDoListHandler(e:React.MouseEvent<HTMLElement>) {
@@ -80,6 +85,7 @@ function App() {
                                  filter={el.filter}
                                  todoLists={todoLists}
                                  setTodoLists={setTodoLists}
+                                 deleteTodoList={deleteTodoList}
                 />)
                 })
             }

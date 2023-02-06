@@ -21,6 +21,8 @@ type PropsType = {
     addTask: (todolistID:string,title: string) => void
     changeStatus: (todolistID:string,taskId:string,eventStatus:boolean)=> void
     filter: FilterValuesType
+    deleteTodoList: (todolistID:string) => void
+
 }
 
 export function Todolist(props: PropsType) {
@@ -54,15 +56,13 @@ export function Todolist(props: PropsType) {
 
 
 
-    const deleteTodoListHandler = (e:React.MouseEvent<HTMLElement>) => {
-        props.setTodoLists(props.todoLists.filter((todoList) => todoList.id !== props.todolistID))
-    }
+    const deleteTodoListHandler = (e:React.MouseEvent<HTMLElement>) => props.deleteTodoList(props.todolistID)
     const onAllClickHandler = () => props.changeFilter(props.todolistID,"all");
     const onActiveClickHandler = () => props.changeFilter(props.todolistID,"active");
     const onCompletedClickHandler = () => props.changeFilter(props.todolistID,"completed");
 
     return <div className="ToDoListContainer">
-        <h3>{props.title}<button onClick={deleteTodoListHandler}>X</button></h3>
+        <h3>{props.title}<button className='ToDoListContainer__delete-button' onClick={deleteTodoListHandler}>X</button></h3>
         <div>
             <input value={title}
                    onChange={ onChangeHandler }
