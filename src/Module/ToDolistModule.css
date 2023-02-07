@@ -6,7 +6,6 @@ margin: 0px;
     border: red 1px solid;
 
 }
-
 .errorMessage {
     color: red;
     position: absolute;
@@ -15,7 +14,10 @@ margin: 0px;
 .ToDoListContainer {
     position: relative;
 }
-.todos{
+.ToDoListContainer__input-error {
+    border:red 3px solid ;
+}
+.todos {
     background-color: antiquewhite;
     border: 1px solid black;
     margin: 30px 10px  0px 10px ;
@@ -25,4 +27,7 @@ margin: 0px;
 }
 .ToDoListContainer__delete-button{
     margin: 0px 20px;
+}
+.activeFilter{
+
 }
