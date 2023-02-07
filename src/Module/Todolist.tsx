@@ -29,6 +29,7 @@ type PropsType = {
 export function Todolist(props: PropsType) {
 
     let [title, setTitle] = useState("")
+    const [buttonName,setButtonName] = useState<FilterValuesType>("all")
     const [error,setError] = useState<string|null>(null)
 
     const addTask = () => {
@@ -55,13 +56,22 @@ export function Todolist(props: PropsType) {
         }
     }
     const inputError = `${error ? "ToDoListContainer__input-error" : '' }`
-
+    const activeFilter = "activeFilter"
 
 
     const deleteTodoListHandler = (e:React.MouseEvent<HTMLElement>) => props.deleteTodoList(props.todolistID)
-    const onAllClickHandler = () => props.changeFilter(props.todolistID,"all");
-    const onActiveClickHandler = () => props.changeFilter(props.todolistID,"active");
-    const onCompletedClickHandler = () => props.changeFilter(props.todolistID,"completed");
+    const onAllClickHandler = () => {
+        props.changeFilter(props.todolistID, "all")
+        setButtonName("all")
+    };
+    const onActiveClickHandler = () => {
+        props.changeFilter(props.todolistID, "active")
+        setButtonName("active")
+    };
+    const onCompletedClickHandler = () => {
+        props.changeFilter(props.todolistID, "completed")
+        setButtonName("completed")
+    };
 
     return <div className="ToDoListContainer">
         <h3>{props.title}<button className='ToDoListContainer__delete-button' onClick={deleteTodoListHandler}>X</button></h3>
@@ -76,7 +86,7 @@ export function Todolist(props: PropsType) {
         </div>
 
         {error && <div className="errorMessage">{error}</div>}
-        <div className="todos">
+        <div className="ToDoListContainer__tasks">
         <ul>
             {
                 props.tasks.map(t => {
@@ -86,7 +96,7 @@ export function Todolist(props: PropsType) {
                         props.changeStatus(props.todolistID,t.id,event.currentTarget.checked)
                     }
 
-                    return <li key={t.id}>
+                    return <li key={t.id} className={t.isDone?'is-done':''}>
                         <input type="checkbox" checked={t.isDone} onChange={changeStatusHandler} />
                         <span>{t.title}</span>
                         <button onClick={ onClickHandler }>x</button>
@@ -96,9 +106,9 @@ export function Todolist(props: PropsType) {
         </ul>
         </div>
         <div className="buttons-container">
-            <button onClick={ onAllClickHandler } >All</button>
-            <button onClick={ onActiveClickHandler } >Active</button>
-            <button onClick={ onCompletedClickHandler } >Completed</button>
+            <button onClick={ onAllClickHandler } className={buttonName==='all'?activeFilter:""}>All</button>
+            <button onClick={ onActiveClickHandler } className={buttonName==='active'?activeFilter:""}>Active</button>
+            <button onClick={ onCompletedClickHandler } className={buttonName==='completed'?activeFilter:""}>Completed</button>
         </div>
     </div>
 }
