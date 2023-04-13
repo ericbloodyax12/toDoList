@@ -1,5 +1,5 @@
 import {FilterValuesType, TodolistType} from "../App";
-import {stat} from "fs";
+
 import {v1} from "uuid";
 
 export type RemoveTodolistActionType = {
@@ -52,15 +52,15 @@ export const todolistsReducer = (state: TodolistType[] , action: ActionType): To
     }
 }
 
-export const  RemoveTodolistAC = (todolistID: string): RemoveTodolistActionType => {
+export const  removeTodolistAC = (todolistID: string): RemoveTodolistActionType => {
     return {type: "REMOVE-TODOLIST", id: todolistID}
 }
-export const AddTodolistAC = (title: string): AddTodolistActionType => {
+export const addTodolistAC = (title: string): AddTodolistActionType => {
     return { type: "ADD-TODOLIST", title: title}
 }
-export const  ChangeTodolistTitleAC = (id: string, title: string ): ChangeTodolistTitleActionType => {
+export const  changeTodolistTitleAC = (id: string, title: string ): ChangeTodolistTitleActionType => {
     return {type: "CHANGE-TODOLIST-TITLE", id, title}
 }
-export const  ChangeTodolistStatusAC = (id: string, filter: FilterValuesType): ChangeTodolistStatusActionType => {
+export const  changeTodolistStatusAC = (id: string, filter: FilterValuesType): ChangeTodolistStatusActionType => {
     return {type: "CHANGE-TODOLIST-STATUS", id, filter}
 }
