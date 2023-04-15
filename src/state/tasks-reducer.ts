@@ -10,8 +10,8 @@ export type RemoveTaskActionType = {
 export type AddTaskActionType = {
     type: "ADD-TASK",
     todolistID: string,
+    title:string
 
-    title:string,
 
 }
 export type ChangeStatusTaskActionType = {
@@ -22,13 +22,13 @@ export type ChangeStatusTaskActionType = {
     isDone: boolean,
 }
 type ChangeStatusPayLoadType = Pick<ChangeStatusTaskActionType, "todolistID" | "id"| "isDone">
-
-
+export type ChangeTitleActionType = ReturnType<typeof ChangeTitleTaskAC>
 
 
 export type ActionTasksType = RemoveTaskActionType
                         | AddTaskActionType
-                        |ChangeStatusTaskActionType
+                        | ChangeStatusTaskActionType
+                        | ChangeTitleActionType
 
 
 
@@ -52,6 +52,13 @@ export const tasksReducer = (state: TasksStateType , action: ActionTasksType): T
                     : t
                 })]}
         }
+        case "CHANGE-TITLE-TASK" : {
+            return {...state, [action.todolistID]: state[action.todolistID].map((t) => {
+                return t.id === action.id
+                    ? {...t, title: action.newTitle}
+                    : t
+                }) }
+        }
 
         default: throw new Error("error, action type was not detected")
     }
@@ -65,4 +72,7 @@ export const addTaskAC = (todolistID: string, title: string): AddTaskActionType 
 }
 export const ChangeStatusTaskAC = (payload: ChangeStatusPayLoadType): ChangeStatusTaskActionType => {
     return {type: "CHANGE-STATUS-TASK", todolistID:payload.todolistID, id:payload.id, isDone:payload.isDone }
+}
+export const ChangeTitleTaskAC = (todolistID:string, id:string, newTitle:string) => {
+    return {type: "CHANGE-TITLE-TASK", todolistID, id, newTitle} as const
 }
