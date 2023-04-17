@@ -1,6 +1,7 @@
 import {FilterValuesType, TasksStateType, TodolistType} from "../App";
 
 import {v1} from "uuid";
+import {AddTodolistActionType, RemoveTodolistActionType} from "./todolists-reducer";
 
 export type RemoveTaskActionType = {
     type: "REMOVE-TASK",
@@ -29,6 +30,8 @@ export type ActionTasksType = RemoveTaskActionType
                         | AddTaskActionType
                         | ChangeStatusTaskActionType
                         | ChangeTitleActionType
+                        | AddTodolistActionType
+                        | RemoveTodolistActionType
 
 
 
@@ -58,6 +61,14 @@ export const tasksReducer = (state: TasksStateType , action: ActionTasksType): T
                     ? {...t, title: action.newTitle}
                     : t
                 }) }
+        }
+        case "ADD-TODOLIST" : {
+           return  {...state, [action.todolistId] : []}
+        }
+        case "REMOVE-TODOLIST" : {
+          let stateCopy = {...state};
+           delete stateCopy[action.id];
+           return stateCopy;
         }
 
         default: throw new Error("error, action type was not detected")
