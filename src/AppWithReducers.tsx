@@ -47,7 +47,7 @@ export function AppWithReducers(props: AppWithReducersPropsType) {
     }
 
     function changeStatus(id: string, isDone: boolean, todolistId: string) {
-        const action = ChangeStatusTaskAC(id, isDone, todolistId)
+        const action = ChangeStatusTaskAC({id,isDone,todolistId})
         dispatchTasks(action)
     }
 
