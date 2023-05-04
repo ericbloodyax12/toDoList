@@ -1,5 +1,5 @@
 import {v1} from 'uuid';
-import {FilterValuesType, TodolistType} from "../App";
+import {FilterValuesType, TodolistType} from "../AppWithReducers";
 import {
     addTodolistAC,
     changeTodolistStatusAC,
@@ -8,8 +8,9 @@ import {
     todolistsReducer
 } from "./todolists-reducer";
 
-let todolistID1 : string;
-let todolistID2 : string;
+let todolistID1:string
+let todolistID2:string
+
 
 let startState: TodolistType[];
 beforeEach(() => {

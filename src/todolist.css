@@ -1,0 +1,8 @@
+h3 {
+    display: flex;
+    gap:10px
+}
+
+.Todolist_div-h3-button {
+    width: 25px;
+}

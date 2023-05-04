@@ -1,7 +1,8 @@
 import React, {ChangeEvent} from 'react';
-import {FilterValuesType} from './App';
+import {FilterValuesType} from './AppWithReducers';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
+import "./todolist.css";
 
 export type TaskType = {
     id: string
@@ -13,9 +14,9 @@ type PropsType = {
     id: string
     title: string
     tasks: Array<TaskType>
-    removeTask: (taskId: string, todolistId: string) => void
+    removeTask: (todolistId: string,taskId: string) => void
     changeFilter: (value: FilterValuesType, todolistId: string) => void
-    addTask: (title: string, todolistId: string) => void
+    addTask: (todolistId: string, title: string ) => void
     changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void
     removeTodolist: (id: string) => void
     changeTodolistTitle: (id: string, newTitle: string) => void
@@ -25,7 +26,7 @@ type PropsType = {
 
 export function Todolist(props: PropsType) {
     const addTask = (title: string) => {
-        props.addTask(title, props.id);
+        props.addTask(props.id,title);
     }
 
     const removeTodolist = () => {
@@ -41,13 +42,13 @@ export function Todolist(props: PropsType) {
 
     return <div>
         <h3> <EditableSpan value={props.title} onChange={changeTodolistTitle} />
-            <button onClick={removeTodolist}>x</button>
+            <button className={"Todolist_div-h3-button"} onClick={removeTodolist}>x</button>
         </h3>
         <AddItemForm addItem={addTask}/>
         <ul>
             {
                 props.tasks.map(t => {
-                    const onClickHandler = () => props.removeTask(t.id, props.id)
+                    const onClickHandler = () => props.removeTask( props.id, t.id)
                     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                         let newIsDoneValue = e.currentTarget.checked;
                         props.changeTaskStatus(t.id, newIsDoneValue, props.id);
