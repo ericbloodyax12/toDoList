@@ -1,6 +1,7 @@
 import {FilterValuesType, TodolistType} from "../AppWithReducers";
 
 import {v1} from "uuid";
+import exp from "constants";
 
 export type RemoveTodolistActionType = {
     type: "REMOVE-TODOLIST",
@@ -26,8 +27,14 @@ export type ActionType = RemoveTodolistActionType
                         | ChangeTodolistTitleActionType
                         | ChangeTodolistStatusActionType
 
+export let todolistID1 = v1();
+export let todolistID2 = v1();
+const initialState:TodolistType[] = [
+        {id: todolistID1, title: "What to learn", filter: "all"},
+{id: todolistID2, title: "What to buy", filter: "all"}
+]
 
-export const todolistsReducer = (state: TodolistType[] , action: ActionType): TodolistType[] => {
+export const todolistsReducer = (state: TodolistType[] = initialState , action: ActionType): TodolistType[] => {
     switch (action.type) {
         case "REMOVE-TODOLIST" : {
             return state.filter((t) => t.id != action.id )
@@ -48,8 +55,8 @@ export const todolistsReducer = (state: TodolistType[] , action: ActionType): To
         case "CHANGE-TODOLIST-STATUS" : {
             return state.map((t) => t.id === action.id ? {...t, filter: action.filter} : t)
         }
-
-        default: throw new Error("error, action type was not detected")
+        default: return state;
+        // default: throw new Error("error, action type was not detected")
     }
 }
 

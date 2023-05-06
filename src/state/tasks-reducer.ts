@@ -1,7 +1,7 @@
 import {FilterValuesType, TasksStateType, TodolistType} from "../AppWithReducers";
 
 import {v1} from "uuid";
-import {AddTodolistActionType, RemoveTodolistActionType} from "./todolists-reducer";
+import {AddTodolistActionType, RemoveTodolistActionType, todolistID1, todolistID2} from "./todolists-reducer";
 
 export type RemoveTaskActionType = {
     type: "REMOVE-TASK",
@@ -36,9 +36,19 @@ export type ActionTasksType = RemoveTaskActionType
                         | AddTodolistActionType
                         | RemoveTodolistActionType
 
+const initialState = {
+    [todolistID1]: [
+        {id: "1", title: "HTML&CSS", isDone: true},
+        {id: "2", title: "JS", isDone: true}
+    ],
+    [todolistID2]: [
+        {id: "1", title: "Milk", isDone: true},
+        {id: "2", title: "React Book", isDone: true},
+        {id: "3", title: "New Book", isDone: true}
+    ]
+}
 
-
-export const tasksReducer = (state: TasksStateType , action: ActionTasksType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType = initialState , action: ActionTasksType): TasksStateType => {
     switch (action.type) {
 
         case "REMOVE-TASK" : {
@@ -74,8 +84,8 @@ export const tasksReducer = (state: TasksStateType , action: ActionTasksType): T
            delete stateCopy[action.id];
            return stateCopy;
         }
-
-        default: throw new Error("error, action type was not detected")
+        default: return state;
+        // default: throw new Error("error, action type was not detected")
     }
 }
 
