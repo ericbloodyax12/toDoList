@@ -1,8 +1,8 @@
 import { tasksReducer } from './tasks-reducer'
 import { todolistsReducer } from './todolists-reducer'
 import { combineReducers, createStore } from 'redux'
-import {TodolistType} from "../AppWithRedux";
-import {TaskType} from "../Todolist";
+// import {TodolistType} from "../AppWithRedux";
+// import {TaskType} from "../Todolist";
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
 //     todolistsReducer: TodolistType[]
 //     tasks: TasksStateType
 // }
-export type AppRooState =  ReturnType<typeof rootReducer>
+export type AppRooStateType =  ReturnType<typeof rootReducer>
 
 // непосредственно создаём store
 export const store = createStore(rootReducer)

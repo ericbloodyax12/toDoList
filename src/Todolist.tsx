@@ -1,8 +1,8 @@
 import React, {ChangeEvent} from 'react';
-import {FilterValuesType} from './AppWithReducers';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import "./todolist.css";
+import {FilterValuesType} from "./AppWithRedux";
 
 export type TaskType = {
     id: string
@@ -61,7 +61,7 @@ export function Todolist(props: PropsType) {
                     return <li key={t.id} className={t.isDone ? "is-done" : ""}>
                         <input type="checkbox" onChange={onChangeHandler} checked={t.isDone}/>
                         <EditableSpan value={t.title} onChange={onTitleChangeHandler} />
-                        <button onClick={onClickHandler}>x</button>
+                        <button className={"Todolist_div-ul-li-button"} onClick={onClickHandler}>x</button>
                     </li>
                 })
             }

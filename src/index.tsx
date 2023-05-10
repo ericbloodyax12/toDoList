@@ -10,11 +10,11 @@ import {store} from "./state/store";
 const container  = document.getElementById('root') as HTMLElement
 const root = createRoot(container);
 root.render(
-    <StrictMode>
+
         <Provider store={store}>
             <AppWithRedux/>
         </Provider>
-    </StrictMode>
+
 );
 
 

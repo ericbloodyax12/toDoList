@@ -6,3 +6,8 @@ h3 {
 .Todolist_div-h3-button {
     width: 25px;
 }
+
+.Todolist_div-ul-li-button {
+    width: 5px;
+    height: 5px;
+}
