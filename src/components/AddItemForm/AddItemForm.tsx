@@ -1,7 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 
 
-type AddItemFormPropsType = {
+export type AddItemFormPropsType = {
     addItem: (title: string) => void
 
 }
@@ -19,7 +19,7 @@ export const AddItemForm = memo(function (props: AddItemFormPropsType) {
             setError("Title is required");
         }
     }
-
+// noinspection DuplicatedCode
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }

@@ -2,7 +2,7 @@ import React, {Reducer, useCallback, useReducer, useState} from 'react';
 import './app.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
-import {AddItemForm} from './AddItemForm';
+import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {
     ActionType,
     addTodolistAC, changeTodolistStatusAC,
@@ -20,7 +20,7 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {AppRooStateType} from "./state/store";
 
-type AppWithReduxPropsType = TodolistType | FilterValuesType | TodolistType | TasksStateType
+export type AppWithReduxPropsType = TodolistType | FilterValuesType | TodolistType | TasksStateType
 export type FilterValuesType = "all" | "active" | "completed";
 export type TodolistType = {
     id: string

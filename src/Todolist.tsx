@@ -1,9 +1,9 @@
 import React, {useCallback} from 'react';
-import {AddItemForm} from './AddItemForm';
+import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import "./todolist.css";
 import {FilterValuesType} from "./AppWithRedux";
-import {Task} from "./Task";
+import {Task} from "./components/Task/Task";
 
 export type TaskType = {
     id: string
