@@ -1,4 +1,4 @@
-import React, {Reducer, useCallback, useReducer, useState} from 'react';
+import React, {Reducer, useCallback, useEffect, useReducer, useState} from 'react';
 import './app.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
@@ -6,9 +6,9 @@ import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {
     ActionType,
     addTodolistAC, changeTodolistStatusAC,
-    changeTodolistTitleAC,
+    changeTodolistTitleAC, getTodoListsAC,
     removeTodolistAC,
-    todolistsReducer
+    todolistsReducer, getTodosThunkTC
 } from "./state/todolists-reducer";
 import {
     addTaskAC,
@@ -18,7 +18,8 @@ import {
     tasksReducer
 } from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRooStateType} from "./state/store";
+import {AppRooStateType, useAppDispatch} from "./state/store";
+import {todolistAPI} from "./api/todolist-api";
 
 export type AppWithReduxPropsType = TodolistType | FilterValuesType | TodolistType | TasksStateType
 export type FilterValuesType = "all" | "active" | "completed";
@@ -35,7 +36,7 @@ export type TasksStateType = {
 export function AppWithRedux(props: AppWithReduxPropsType) {
     console.log("AppWithRedux form called")
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const todolists = useSelector<AppRooStateType,TodolistType[]>((state) => state.todolists)
     const tasks = useSelector<AppRooStateType,TasksStateType>((state) => state.tasks)
 
@@ -83,6 +84,9 @@ export function AppWithRedux(props: AppWithReduxPropsType) {
         dispatch(action)
     },[dispatch])
 
+    useEffect(() =>  {
+       dispatch(getTodosThunkTC)
+    },[])
     return (
         <div className="App">
             <AddItemForm addItem={addTodolist}/>

@@ -28,7 +28,6 @@ type PropsType = {
 }
 
 export const Todolist = React.memo((props: PropsType) => {
-    console.log("Todolist called")
     const addTask = useCallback((title: string) => {
         props.addTask(props.id,title);
     },[props.addTask, props.id])
@@ -65,7 +64,7 @@ export const Todolist = React.memo((props: PropsType) => {
         <AddItemForm addItem={addTask}/>
         <ul>
             {
-                props.tasks.map(task => <Task
+                props.tasks?.map(task => <Task
                     key={task.id}
                     task={task}
                     changeTaskStatus={props.changeTaskStatus}

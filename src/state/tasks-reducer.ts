@@ -1,5 +1,11 @@
 import {v1} from "uuid";
-import {AddTodolistActionType, RemoveTodolistActionType, todolistID1, todolistID2} from "./todolists-reducer";
+import {
+    AddTodolistActionType, GetTodoListsACType,
+    RemoveTodolistActionType,
+    SET_TODOLISTS,
+    todolistID1,
+    todolistID2
+} from "./todolists-reducer";
 import {TasksStateType} from "../AppWithRedux";
 
 export type RemoveTaskActionType = {
@@ -34,6 +40,7 @@ export type ActionTasksType = RemoveTaskActionType
                         | ChangeTitleActionType
                         | AddTodolistActionType
                         | RemoveTodolistActionType
+                        | GetTodoListsACType
 
 const initialState = {
     [todolistID1]: [
@@ -49,6 +56,12 @@ const initialState = {
 
 export const tasksReducer = (state: TasksStateType = initialState , action: ActionTasksType): TasksStateType => {
     switch (action.type) {
+
+        case SET_TODOLISTS : {
+            let stateCopy = {...state}
+            action.todoLists.forEach((td) => stateCopy[td.id] = [])
+            return stateCopy
+        }
 
         case "REMOVE-TASK" : {
             console.log(state, action.todolistID)
