@@ -109,7 +109,6 @@ export function AppWithRedux(props: AppWithReduxPropsType) {
                         removeTodolist={removeTodolist}
                         changeTaskTitle={changeTaskTitle}
                         changeTodolistTitle={changeTodolistTitle}
-
                     />
                 })
             }

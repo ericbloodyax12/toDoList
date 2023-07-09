@@ -8,6 +8,12 @@ h3 {
 }
 
 .Todolist_div-ul-li-button {
-    width: 5px;
-    height: 5px;
+    width: 15px;
+    height: 15px;
+}
+
+.Todolist_task-li {
+    gap:5px;
+    display: flex;
+    align-items: center
 }
