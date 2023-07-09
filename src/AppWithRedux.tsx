@@ -8,7 +8,7 @@ import {
     addTodolistAC, changeTodolistStatusAC,
     changeTodolistTitleAC, getTodoListsAC,
     removeTodolistAC,
-    todolistsReducer, getTodosThunkTC
+    todolistsReducer, getTodosTC
 } from "./state/todolists-reducer";
 import {
     addTaskAC,
@@ -85,7 +85,8 @@ export function AppWithRedux(props: AppWithReduxPropsType) {
     },[dispatch])
 
     useEffect(() =>  {
-       dispatch(getTodosThunkTC)
+       dispatch(getTodosTC())
+
     },[])
     return (
         <div className="App">

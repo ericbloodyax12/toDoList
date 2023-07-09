@@ -86,9 +86,9 @@ export const getTodoListsAC = (todoLists: TodoListType[]) => {
     return {type: SET_TODOLISTS, todoLists} as const
 }
 
-export const getTodosThunkTC =() => (dispatch: Dispatch) => {
-        todolistAPI.getTodoList()
-            .then((res) => {
-                dispatch(getTodoListsAC(res.data))
-            })
+export const getTodosTC = (id?:string) => (dispatch:Dispatch)  => {
+    // внутри санки можно делать побочные эффекты (запросы на сервер)
+    todolistAPI.getTodoList().then((res) => {
+        dispatch(getTodoListsAC(res.data))
+    })
 }
