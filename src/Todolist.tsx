@@ -1,15 +1,14 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import "./todolist.css";
 import {FilterValuesType} from "./AppWithRedux";
 import {Task} from "./components/Task/Task";
+import {getTasksTC} from "./state/tasks-reducer";
+import {useAppDispatch} from "./state/store";
+import {TaskType} from "./api/todolist-api";
 
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
+
 
 type PropsType = {
 
@@ -32,6 +31,13 @@ export const Todolist = React.memo((props: PropsType) => {
         props.addTask(props.id,title);
     },[props.addTask, props.id])
 
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+
+        dispatch(getTasksTC(props.id))
+    }, [])
+
     const removeTodolist = () => {
         props.removeTodolist(props.id);
     }
@@ -51,11 +57,12 @@ export const Todolist = React.memo((props: PropsType) => {
     let tasksForTodolist = props.tasks
 
     if (props.filter === "active") {
-        tasksForTodolist = props.tasks.filter((t: TaskType) => t.isDone === false);
+        tasksForTodolist = props.tasks.filter((t: TaskType) => t.completed === false);
     }
     if (props.filter === "completed") {
-        tasksForTodolist = props.tasks.filter((t: TaskType) => t.isDone === true);
+        tasksForTodolist = props.tasks.filter((t: TaskType) => t.completed === true);
     }
+
 
     return <div>
         <h3> <EditableSpan value={props.title} onChange={changeTodolistTitle} />

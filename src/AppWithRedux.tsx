@@ -1,6 +1,6 @@
 import React, {Reducer, useCallback, useEffect, useReducer, useState} from 'react';
 import './app.css';
-import {TaskType, Todolist} from './Todolist';
+import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {
@@ -11,17 +11,16 @@ import {
     todolistsReducer, getTodosTC
 } from "./state/todolists-reducer";
 import {
-    addTaskAC,
     ChangeStatusTaskAC,
-    ChangeTitleTaskAC,
+    ChangeTitleTaskAC, deleteTasksTC, getTasksTC, postTasksTC,
     removeTaskAC,
     tasksReducer
 } from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRooStateType, useAppDispatch} from "./state/store";
-import {todolistAPI} from "./api/todolist-api";
+import {AppRooStateType, useAppDispatch, useAppSelector} from "./state/store";
+import {TaskType, todolistAPI} from "./api/todolist-api";
 
-export type AppWithReduxPropsType = TodolistType | FilterValuesType | TodolistType | TasksStateType
+export type AppWithReduxPropsType =  FilterValuesType | TodolistType | TasksStateType
 export type FilterValuesType = "all" | "active" | "completed";
 export type TodolistType = {
     id: string
@@ -38,15 +37,15 @@ export function AppWithRedux(props: AppWithReduxPropsType) {
 
     const dispatch = useAppDispatch();
     const todolists = useSelector<AppRooStateType,TodolistType[]>((state) => state.todolists)
-    const tasks = useSelector<AppRooStateType,TasksStateType>((state) => state.tasks)
+    const tasks = useAppSelector<TasksStateType>((state) => state.tasks)
 
 
     const removeTask = useCallback((todolistID: string, id: string) => {
-        dispatch(removeTaskAC(todolistID, id))
+        dispatch(deleteTasksTC(todolistID, id))
     },[dispatch])
 
     const addTask = useCallback((todolistID: string, title: string) => {
-        dispatch(addTaskAC(todolistID, title))
+        dispatch(postTasksTC(todolistID, title))
     },[dispatch])
 
     const changeFilter = useCallback((filter: FilterValuesType, id: string,) => {
@@ -88,6 +87,7 @@ export function AppWithRedux(props: AppWithReduxPropsType) {
        dispatch(getTodosTC())
 
     },[])
+
     return (
         <div className="App">
             <AddItemForm addItem={addTodolist}/>
