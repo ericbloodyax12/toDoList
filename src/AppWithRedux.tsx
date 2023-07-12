@@ -1,32 +1,22 @@
-import React, {Reducer, useCallback, useEffect, useReducer, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './app.css';
 import {Todolist} from './Todolist';
-import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {
-    ActionType,
-    addTodolistAC, changeTodolistStatusAC,
-    changeTodolistTitleAC, getTodoListsAC,
-    removeTodolistAC,
-    todolistsReducer, getTodosTC
+    addTodolistAC,
+    changeTodolistStatusAC,
+    changeTodolistTitleAC,
+    FilterValuesType,
+    getTodosTC,
+    removeTodolistAC, TodolistDomainType,
+    TodolistType
 } from "./state/todolists-reducer";
-import {
-    ChangeStatusTaskAC,
-    ChangeTitleTaskAC, deleteTasksTC, getTasksTC, postTasksTC,
-    removeTaskAC,
-    tasksReducer
-} from "./state/tasks-reducer";
-import {useDispatch, useSelector} from "react-redux";
+import {ChangeStatusTaskAC, ChangeTitleTaskAC, deleteTasksTC, postTasksTC} from "./state/tasks-reducer";
+import {useSelector} from "react-redux";
 import {AppRooStateType, useAppDispatch, useAppSelector} from "./state/store";
-import {TaskType, todolistAPI} from "./api/todolist-api";
+import {TaskStatuses, TaskType} from "./api/todolist-api";
 
 export type AppWithReduxPropsType =  FilterValuesType | TodolistType | TasksStateType
-export type FilterValuesType = "all" | "active" | "completed";
-export type TodolistType = {
-    id: string
-    title: string
-    filter: FilterValuesType
-}
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -36,7 +26,7 @@ export function AppWithRedux(props: AppWithReduxPropsType) {
     console.log("AppWithRedux form called")
 
     const dispatch = useAppDispatch();
-    const todolists = useSelector<AppRooStateType,TodolistType[]>((state) => state.todolists)
+    const todolists = useSelector<AppRooStateType,TodolistDomainType[]>((state) => state.todolists)
     const tasks = useAppSelector<TasksStateType>((state) => state.tasks)
 
 
@@ -53,8 +43,8 @@ export function AppWithRedux(props: AppWithReduxPropsType) {
        dispatch(action)
     },[dispatch])
 
-    const changeStatus = useCallback((id: string, isDone: boolean, todolistId: string) => {
-        const action = ChangeStatusTaskAC({id,isDone,todolistId})
+    const changeStatus = useCallback((id: string, completed: TaskStatuses, todolistId: string) => {
+        const action = ChangeStatusTaskAC({id,completed,todolistId})
         dispatch(action)
     },[dispatch])
 

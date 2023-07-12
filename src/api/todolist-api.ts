@@ -51,14 +51,14 @@ export const todolistAPI = {
         return instance.post<PostTaskResponse>(`todo-lists/${todoListId}/tasks`, {title})
     },
 }
-enum TaskStatuses {
+export enum TaskStatuses {
     New = 0,
     Inprogress,
     Completed,
     Draft
 
 }
-enum TaskPriorities  {
+export enum TaskPriorities  {
     Low = 0,
     Middle ,
     Hi,

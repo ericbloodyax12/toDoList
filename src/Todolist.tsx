@@ -2,25 +2,22 @@ import React, {useCallback, useEffect} from 'react';
 import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import "./todolist.css";
-import {FilterValuesType} from "./AppWithRedux";
 import {Task} from "./components/Task/Task";
 import {getTasksTC} from "./state/tasks-reducer";
 import {useAppDispatch} from "./state/store";
-import {TaskType} from "./api/todolist-api";
-
+import {TaskStatuses, TaskType} from "./api/todolist-api";
+import {FilterValuesType} from "./state/todolists-reducer";
 
 
 type PropsType = {
-
     id: string
     title: string
     tasks: Array<TaskType>
     removeTask: (todolistId: string,taskId: string) => void
     changeTaskTitle: (todolistID:string, id:string, newTitle:string) => void
-    changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void
+    changeTaskStatus: (id: string, completed: TaskStatuses, todolistId: string) => void
     changeFilter: (value: FilterValuesType, todolistId: string) => void
     addTask: (todolistId: string, title: string ) => void
-
     removeTodolist: (id: string) => void
     changeTodolistTitle: (id: string, newTitle: string) => void
     filter: FilterValuesType
@@ -54,13 +51,14 @@ export const Todolist = React.memo((props: PropsType) => {
     const onCompletedClickHandler = useCallback(() => props.changeFilter("completed", props.id),[
         props.changeFilter,
         props.id]);
+
     let tasksForTodolist = props.tasks
 
     if (props.filter === "active") {
-        tasksForTodolist = props.tasks.filter((t: TaskType) => t.completed === false);
+        tasksForTodolist = props.tasks.filter((t: TaskType) => t.status === TaskStatuses.New);
     }
     if (props.filter === "completed") {
-        tasksForTodolist = props.tasks.filter((t: TaskType) => t.completed === true);
+        tasksForTodolist = props.tasks.filter((t: TaskType) => t.status === TaskStatuses.Completed);
     }
 
 
@@ -71,7 +69,7 @@ export const Todolist = React.memo((props: PropsType) => {
         <AddItemForm addItem={addTask}/>
         <ul>
             {
-                props.tasks?.map(task => <Task
+                tasksForTodolist?.map(task => <Task
                     key={task.id}
                     task={task}
                     changeTaskStatus={props.changeTaskStatus}

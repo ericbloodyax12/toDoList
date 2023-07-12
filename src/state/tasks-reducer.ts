@@ -8,7 +8,7 @@ import {
 } from "./todolists-reducer";
 import {TasksStateType} from "../AppWithRedux";
 import {Dispatch} from "redux";
-import {GetTasksResponse, todolistAPI} from "../api/todolist-api";
+import {GetTasksResponse, TaskStatuses, todolistAPI} from "../api/todolist-api";
 import {TaskType} from "../api/todolist-api";
 
 export type RemoveTaskActionType = {
@@ -20,7 +20,7 @@ export type ChangeStatusTaskActionType = {
     type: "CHANGE-STATUS-TASK",
     payload: {
     id: string,
-    isDone: boolean,
+    completed: TaskStatuses,
     todolistId: string
     }
 
@@ -81,7 +81,7 @@ export const tasksReducer = (state: TasksStateType = {} , action: ActionTasksTyp
         case "CHANGE-STATUS-TASK" : {
             return {...state, [action.payload.todolistId]: [...state[action.payload.todolistId].map(t => {
                 return t.id === action.payload.id
-                    ? {...t, isDone:action.payload.isDone}
+                    ? {...t, isDone:action.payload.completed}
                     : t
                 })]}
         }
