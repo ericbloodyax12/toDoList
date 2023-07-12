@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, { AxiosResponse } from 'axios'
+import {changeStatusTaskTC} from "../state/tasks-reducer";
 
 export type TodoListType =
             {
@@ -49,6 +50,9 @@ export const todolistAPI = {
     },
     postTask (todoListId: string, title: string ) {
         return instance.post<PostTaskResponse>(`todo-lists/${todoListId}/tasks`, {title})
+    },
+    changeStatusTask (todoListId: string, taskId: string, model: UpdateTaskModelType ) {
+        return instance.put<ResponseType<{ item: TaskType }>, AxiosResponse<ResponseType<{ item: TaskType }>>, UpdateTaskModelType>(`todo-lists/${todoListId}/tasks/${taskId}`, model )
     },
 }
 export enum TaskStatuses {
@@ -102,4 +106,13 @@ type PostTaskResponse = {
 
     resultCode: number
     messages: string[]
+}
+
+type UpdateTaskModelType = {
+    title:string,
+    description: string,
+    status: TaskStatuses,
+    priority: TaskPriorities
+    startDate: string
+    deadline: string
 }
