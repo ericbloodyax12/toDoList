@@ -21,7 +21,7 @@ export const Task = React.memo((props: TaskPropsType) => {
     }, [ props.changeTaskTitle, props.task.id,  props.todolistId])
 
     return <li key={props.task.id} className={`Todolist_task-li ${props.task.completed ? "is-done" : ""}`}>
-        <input type="checkbox" onChange={onChangeHandler} checked={props.task.completed}/>
+        <input type="checkbox" onChange={onChangeHandler} checked={props.task.status === 2}/>
         <EditableSpan value={props.task.title} onChange={onTitleChangeHandler}/>
         <button className={"Todolist_div-ul-li-button"} onClick={onClickHandler}>x</button>
     </li>
