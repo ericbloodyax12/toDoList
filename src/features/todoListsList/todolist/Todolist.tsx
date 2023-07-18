@@ -1,12 +1,14 @@
 import React, {useCallback, useEffect} from 'react';
-import {AddItemForm} from './components/AddItemForm/AddItemForm';
-import {EditableSpan} from './EditableSpan';
-import "./todolist.css";
-import {Task} from "./components/Task/Task";
-import {getTasksTC} from "./state/tasks-reducer";
-import {useAppDispatch} from "./state/store";
-import {TaskStatuses, TaskType} from "./api/todolist-api";
-import {FilterValuesType} from "./state/todolists-reducer";
+import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
+import {useAppDispatch} from "../../../state/store";
+
+import {FilterValuesType} from "../../../state/todolists-reducer";
+import {TaskStatuses, TaskType} from "../../../api/todolist-api";
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {getTasksTC} from "../../../state/tasks-reducer";
+import {Task} from "../Task/Task";
+
+
 
 
 type PropsType = {

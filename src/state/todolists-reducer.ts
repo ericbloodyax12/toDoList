@@ -2,36 +2,21 @@ import {v1} from "uuid";
 import {todolistAPI, TodoListType} from "../api/todolist-api";
 import {Dispatch} from "redux";
 
-export type RemoveTodolistActionType = {
-    type: "REMOVE-TODOLIST",
-    id:string
-}
-export type AddTodolistActionType = ReturnType <typeof addTodolistAC>
-
 export const SET_TODOLISTS = "SET-TODOLISTS"
-export type ChangeTodolistTitleActionType = ReturnType <typeof changeTodolistTitleAC>
+
 export type FilterValuesType = "all" | "active" | "completed";
 export type TodolistType = {
     id: string
     title: string
     filter: FilterValuesType
 }
-export type ChangeTodolistStatusActionType = {
-    type: "CHANGE-TODOLIST-STATUS",
-    id: string,
-    filter: FilterValuesType
-}
 export type TodolistDomainType = TodolistType & {filter: FilterValuesType}
-export type ActionType = RemoveTodolistActionType
-                        | AddTodolistActionType
-                        | ChangeTodolistTitleActionType
-                        | ChangeTodolistStatusActionType
-                        | GetTodoListsACType
+export type ActionType = ReturnType<typeof removeTodolistAC>
+                        | ReturnType <typeof addTodolistAC>
+                        | ReturnType <typeof changeTodolistTitleAC>
+                        | ReturnType<typeof getTodoListsAC>
+                        | ReturnType<typeof changeTodolistStatusAC>
 
-export type GetTodoListsACType = ReturnType<typeof getTodoListsAC>
-
-export let todolistID1 = v1();
-export let todolistID2 = v1();
 const initialState:TodolistDomainType[] = []
 
 export const todolistsReducer = (state: TodolistDomainType[] = initialState , action: ActionType): TodolistDomainType[] => {
@@ -57,21 +42,12 @@ export const todolistsReducer = (state: TodolistDomainType[] = initialState , ac
     }
 }
 
-export const removeTodolistAC = (todolistID: string): RemoveTodolistActionType => {
-    return {type: "REMOVE-TODOLIST", id: todolistID}
-}
-export const addTodolistAC = (todoList: TodoListType) => {
-    return { type: "ADD-TODOLIST", todoList } as const
-}
-export const changeTodolistTitleAC = (id: string, title: string ) => {
-    return {type: "CHANGE-TODOLIST-TITLE", id, title} as const
-}
-export const changeTodolistStatusAC = (id: string, filter: FilterValuesType): ChangeTodolistStatusActionType => {
-    return {type: "CHANGE-TODOLIST-STATUS", id, filter}
-}
-export const getTodoListsAC = (todoLists: TodoListType[]) => {
-    return {type: SET_TODOLISTS, todoLists} as const
-}
+export const removeTodolistAC = (todolistID: string) => ({type: "REMOVE-TODOLIST", id: todolistID} as const)
+export const addTodolistAC = (todoList: TodoListType) => ({ type: "ADD-TODOLIST", todoList } as const)
+export const changeTodolistTitleAC = (id: string, title: string ) => ({type: "CHANGE-TODOLIST-TITLE", id, title} as const)
+export const changeTodolistStatusAC = (id: string, filter: FilterValuesType) => ({type: "CHANGE-TODOLIST-STATUS", id, filter} as const)
+export const getTodoListsAC = (todoLists: TodoListType[]) => ({type: SET_TODOLISTS, todoLists} as const)
+
 
 export const getTodosTC = () => (dispatch:Dispatch)  => {
     // внутри санки можно делать побочные эффекты (запросы на сервер)
