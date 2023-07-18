@@ -5,9 +5,9 @@ import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {
     addTodolistAC,
     changeTodolistStatusAC,
-    changeTodolistTitleAC,
+    changeTodolistTitleAC, deleteTodosTC,
     FilterValuesType,
-    getTodosTC,
+    getTodosTC, postTodosTC, putTitleTodosTC,
     removeTodolistAC, TodolistDomainType,
     TodolistType
 } from "./state/todolists-reducer";
@@ -49,7 +49,6 @@ export function AppWithRedux(props: AppWithReduxPropsType) {
     },[dispatch])
 
     const changeStatus = useCallback((id: string, status: TaskStatuses, todolistId: string) => {
-
         dispatch(changeStatusTaskTC(todolistId,id, status))
     },[dispatch])
 
@@ -62,19 +61,19 @@ export function AppWithRedux(props: AppWithReduxPropsType) {
     },[dispatch])
 
     const removeTodolist = useCallback((todolistID: string) => {
-        const action = removeTodolistAC(todolistID)
+        const action = deleteTodosTC(todolistID)
         dispatch(action)
     },[dispatch])
 
     const changeTodolistTitle = useCallback((id: string, title: string) => {
-        const action = changeTodolistTitleAC(id, title)
+        const action = putTitleTodosTC(id, title)
         dispatch(action)
     },[dispatch])
 
 
 
     const addTodolist = useCallback((title: string) => {
-        const action = addTodolistAC(title)
+        const action = postTodosTC(title)
         dispatch(action)
     },[dispatch])
 
