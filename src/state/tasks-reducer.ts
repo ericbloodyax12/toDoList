@@ -5,11 +5,11 @@ import {
 
 import {Dispatch} from "redux";
 import {TaskStatuses, TaskType, todolistAPI, UpdateTaskModelType} from "../api/todolist-api";
-import {AppRootStateType} from "./store";
+import {AppActionsType, AppRootStateType} from "./store";
 import {TasksStateType} from "../app/App";
 
 
-type ActionTasksType = ReturnType<typeof removeTaskAC>
+export type ActionTasksType = ReturnType<typeof removeTaskAC>
                         | ReturnType<typeof ChangeTitleTaskAC>
                         | ReturnType <typeof addTodolistAC>
                         | ReturnType<typeof removeTodolistAC>
@@ -44,7 +44,6 @@ export const tasksReducer = (state: TasksStateType = {} , action: ActionTasksTyp
             action.todoLists.forEach((td) => stateCopy[td.id] = [])
             return stateCopy
         }
-
         case "REMOVE-TASK" : {
           return  {...state, [action.todolistID]:state[action.todolistID].filter(t => t.id !== action.id) }
 
@@ -96,12 +95,13 @@ export const getTasksTC = (todoListId:string) => (dispatch:Dispatch)  => {
         dispatch(getTasksAC(todoListId, res.data.items))
     })
 }
-export const deleteTasksTC = (todoListId:string, taskId: string) => (dispatch:Dispatch)  => {
+export const deleteTasksTC = (todoListId:string, taskId: string) => (dispatch:Dispatch<AppActionsType>)  => {
     todolistAPI.deleteTasks(todoListId, taskId).then((res) => {
         dispatch(deleteTasksAC(todoListId, taskId))
     })
 }
-export const changeStatusTaskTC = (todoListId:string, taskId: string, status: TaskStatuses) => (dispatch:Dispatch, getState: () => AppRootStateType)  => {
+export const changeStatusTaskTC = (todoListId:string, taskId: string, status: TaskStatuses) => (dispatch:Dispatch<AppActionsType>,
+        getState: () => AppRootStateType)  => {
     const allTasksFromState = getState().tasks;
     const task = allTasksFromState[todoListId].find((t) => t.id === taskId)
     if (task) {

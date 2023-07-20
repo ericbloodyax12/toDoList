@@ -7,6 +7,7 @@ import {FilterValuesType, postTodosTC, TodolistDomainType, TodolistType} from ".
 import {TaskType} from "../api/todolist-api";
 import {TodoListsList} from "../features/todoListsList/TodoListsList";
 import {AddItemForm} from "../components/AddItemForm/AddItemForm";
+import {LinearProgress} from "@mui/material";
 
 
 export type AppWithReduxPropsType = FilterValuesType | TodolistType | TasksStateType | TodoListsListType
@@ -29,6 +30,7 @@ export function App(props: AppWithReduxPropsType) {
         <div className="App">
             <AddItemForm addItem={addTodolist}/>
             <TodoListsList todolists={todolists}/>
+            <LinearProgress color="secondary" />
         </div>
     );
 }
