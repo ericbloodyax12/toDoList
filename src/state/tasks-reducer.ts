@@ -18,18 +18,6 @@ export type ActionTasksType = ReturnType<typeof removeTaskAC>
                         | ReturnType<typeof deleteTasksAC>
                         | ReturnType<typeof addTaskAC>
                         | ReturnType <typeof changeStatusTasksAC>
-// const initialState = {
-//     [todolistID1]: [
-//         {id: "1", title: "HTML&CSS", isDone: true},
-//         {id: "2", title: "JS", isDone: true}
-//     ],
-//     [todolistID2]: [
-//         {id: "1", title: "Milk", isDone: true},
-//         {id: "2", title: "React Book", isDone: true},
-//         {id: "3", title: "New Book", isDone: true}
-//     ]
-// }
-
 export const tasksReducer = (state: TasksStateType = {} , action: ActionTasksType): TasksStateType => {
     switch (action.type) {
         case "DELETE-TASK": {

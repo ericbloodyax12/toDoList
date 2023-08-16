@@ -1,12 +1,14 @@
 //app-reducer.tsx
+import {addTodolistAC} from "../state/todolists-reducer";
+
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed' | 'imgLoading'
 
 const initialState = {
-    status: 'loading' as RequestStatusType
+    status: 'idle' as RequestStatusType
 }
 
 type InitialStateType = typeof initialState
-
+export type setStatusACType = ReturnType <typeof setStatusAC>
 export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
         case 'APP/SET-STATUS':
@@ -16,4 +18,8 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
     }
 }
 
-type ActionsType = any
+export const setStatusAC = (status:RequestStatusType) => ({
+type:'APP/SET-STATUS', status
+} as const)
+
+type ActionsType = setStatusACType

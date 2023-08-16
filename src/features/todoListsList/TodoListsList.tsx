@@ -11,7 +11,7 @@ import {
 } from "../../state/todolists-reducer";
 import {TaskStatuses} from "../../api/todolist-api";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
-
+import "./todolist/todolist.css"
 import {TasksStateType} from "../../app/App";
 import {Todolist} from "./todolist/Todolist";
 
@@ -56,7 +56,7 @@ export const TodoListsList: React.FC<TodoListsListType> = (props) => {
 
     }, [])
 
-    return <>
+    return <div className="Todolist_div">
         {props.todolists.map(tl => {
             let allTodolistTasks = tasks[tl.id];
             let tasksForTodolist = allTodolistTasks;
@@ -81,5 +81,5 @@ export const TodoListsList: React.FC<TodoListsListType> = (props) => {
                 </div>
             </>
         })}
-    </>
+    </div>
 }

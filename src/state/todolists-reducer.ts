@@ -2,6 +2,7 @@ import {v1} from "uuid";
 import {todolistAPI, TodoListType} from "../api/todolist-api";
 import {Dispatch} from "redux";
 import {AppActionsType, ThunkDispatchType} from "./store";
+import {setStatusAC, setStatusACType} from "../app/app-reducer";
 
 export const SET_TODOLISTS = "SET-TODOLISTS"
 
@@ -12,15 +13,16 @@ export type TodolistType = {
     filter: FilterValuesType
 }
 export type TodolistDomainType = TodolistType & {filter: FilterValuesType}
-export type TodoListActionType = ReturnType<typeof removeTodolistAC>
+export type TodoListActionsType = ReturnType<typeof removeTodolistAC>
                         | ReturnType <typeof addTodolistAC>
                         | ReturnType <typeof changeTodolistTitleAC>
                         | ReturnType<typeof getTodoListsAC>
                         | ReturnType<typeof changeTodolistStatusAC>
+                        | setStatusACType
 
 const initialState:TodolistDomainType[] = []
 
-export const todolistsReducer = (state: TodolistDomainType[] = initialState , action: TodoListActionType): TodolistDomainType[] => {
+export const todolistsReducer = (state: TodolistDomainType[] = initialState , action: TodoListActionsType): TodolistDomainType[] => {
     switch (action.type) {
         case SET_TODOLISTS : {
             return action.todoLists.map((td) => ({...td, filter: "all"}))
@@ -51,9 +53,11 @@ export const getTodoListsAC = (todoLists: TodoListType[]) => ({type: SET_TODOLIS
 
 
 export const getTodosTC = () => (dispatch:Dispatch)  => {
+    dispatch(setStatusAC("loading"))
     // внутри санки можно делать побочные эффекты (запросы на сервер)
     todolistAPI.getTodoList().then((res) => {
         dispatch(getTodoListsAC(res.data))
+        dispatch(setStatusAC("succeeded"))
     })
 }
 // export const getTodosTC = (): ThunkDispatchType => async dispatch => {

@@ -3,6 +3,9 @@ h3 {
     gap:10px
 }
 
+Todolist_div {
+display: flex;
+}
 .Todolist_div-h3-button {
     width: 25px;
 }
