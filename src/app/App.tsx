@@ -15,6 +15,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import LinearProgress from '@mui/material/LinearProgress'
 import {RequestStatusType} from "./app-reducer";
+import {CustomizedSnackbars} from "../components/ErrorSnackBar/ErrorSnackBar";
+
 
 
 export type AppWithReduxPropsType = FilterValuesType | TodolistType | TasksStateType | TodoListsListType
@@ -58,7 +60,7 @@ export function App(props: AppWithReduxPropsType) {
 
             <AddItemForm addItem={addTodolist}/>
             <TodoListsList todolists={todolists}/>
-
+            <CustomizedSnackbars />
         </div>
     );
 }
