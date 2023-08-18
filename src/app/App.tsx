@@ -19,7 +19,8 @@ import {CustomizedSnackbars} from "../components/ErrorSnackBar/ErrorSnackBar";
 
 
 
-export type AppWithReduxPropsType = FilterValuesType | TodolistType | TasksStateType | TodoListsListType
+export type AppWithReduxPropsType = FilterValuesType | TodolistType | TasksStateType | TodoListsListType | TodolistDomainType
+
 
 type TodoListsListType = {
     todolists: TodolistDomainType[]
@@ -32,10 +33,7 @@ export function App(props: AppWithReduxPropsType) {
     const status = useAppSelector<RequestStatusType>((state) => state.app.status )
     const dispatch = useAppDispatch();
     const todolists = useSelector<AppRootStateType, TodolistDomainType[]>((state) => state.todolists)
-    const addTodolist = useCallback((title: string) => {
-        const action = postTodosTC(title)
-        dispatch(action)
-    }, [dispatch])
+
     return (
         <div className="App">
 
@@ -58,8 +56,8 @@ export function App(props: AppWithReduxPropsType) {
                 {status === "loading" &&  <LinearProgress color="secondary" />}
             </AppBar>
 
-            <AddItemForm addItem={addTodolist}/>
-            <TodoListsList todolists={todolists}/>
+
+            <TodoListsList todolists={todolists} entityStatus={status}/>
             <CustomizedSnackbars />
         </div>
     );

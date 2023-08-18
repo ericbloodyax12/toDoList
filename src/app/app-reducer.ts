@@ -4,7 +4,7 @@ import {addTodolistAC} from "../state/todolists-reducer";
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed' | 'imgLoading'
 
 const initialState = {
-    error: "ERROR" as null | string, // по дефолту налл, но может быть как налл или стрингой
+    error: null as null | string, // по дефолту налл, но может быть как налл или стрингой
     status: 'idle' as RequestStatusType
 }
 

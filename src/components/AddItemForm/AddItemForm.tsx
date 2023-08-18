@@ -1,8 +1,11 @@
 import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
+import {RequestStatusType} from "../../app/app-reducer";
 
 
 export type AddItemFormPropsType = {
+    disabled: boolean
     addItem: (title: string) => void
+
 
 }
 
@@ -38,8 +41,9 @@ export const AddItemForm = memo(function (props: AddItemFormPropsType) {
                onChange={onChangeHandler}
                onKeyPress={onKeyPressHandler}
                className={error ? "error" : ""}
+               disabled={props.disabled}
         />
-        <button onClick={addItem}>+</button>
+        <button onClick={addItem} disabled={props.disabled}>+</button>
 
         {error && <div className="error-message">{error}</div>}
     </div>

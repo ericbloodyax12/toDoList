@@ -7,7 +7,7 @@ import {Dispatch} from "redux";
 import {TaskStatuses, TaskType, todolistAPI, UpdateTaskModelType} from "../api/todolist-api";
 import {AppActionsType, AppRootStateType} from "./store";
 import {TasksStateType} from "../app/App";
-import {setStatusAC, setStatusACType} from "../app/app-reducer";
+import {setErrorAC, setStatusAC, setStatusACType} from "../app/app-reducer";
 
 
 export type ActionTasksType = ReturnType<typeof removeTaskAC>
@@ -20,6 +20,7 @@ export type ActionTasksType = ReturnType<typeof removeTaskAC>
                         | ReturnType<typeof addTaskAC>
                         | ReturnType <typeof changeStatusTasksAC>
                         | setStatusACType
+                        | ReturnType<typeof setErrorAC>
 export const tasksReducer = (state: TasksStateType = {} , action: ActionTasksType): TasksStateType => {
     switch (action.type) {
         case "DELETE-TASK": {
@@ -115,10 +116,20 @@ export const changeStatusTaskTC = (todoListId:string, taskId: string, status: Ta
 }}
 export const postTasksTC = (todoListId:string, title: string) => (dispatch:Dispatch)  => {
     dispatch(setStatusAC("loading"))
+
     todolistAPI.postTask(todoListId, title).then((res) => {
-       console.log(res)
-        dispatch(addTaskAC(todoListId, res.data.data.item))
-        dispatch(setStatusAC("succeeded"))
+       if (res.data.resultCode === 0) {
+           dispatch(addTaskAC(todoListId, res.data.data.item))
+
+       } else {
+           if (res.data.messages[0].length) {
+               dispatch(setErrorAC(res.data.messages[0]))
+           }
+           else {
+               dispatch(setErrorAC("Here's some error"))
+           }
+       }
+        dispatch(setStatusAC("idle"))
     })
 }
 

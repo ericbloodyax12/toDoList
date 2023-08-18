@@ -1,8 +1,7 @@
 import {v1} from "uuid";
 import {todolistAPI, TodoListType} from "../api/todolist-api";
 import {Dispatch} from "redux";
-import {AppActionsType, ThunkDispatchType} from "./store";
-import {setStatusAC, setStatusACType} from "../app/app-reducer";
+import {RequestStatusType, setErrorAC, setStatusAC, setStatusACType} from "../app/app-reducer";
 
 export const SET_TODOLISTS = "SET-TODOLISTS"
 
@@ -12,26 +11,28 @@ export type TodolistType = {
     title: string
     filter: FilterValuesType
 }
-export type TodolistDomainType = TodolistType & {filter: FilterValuesType}
+export type TodolistDomainType = TodolistType & {filter: FilterValuesType, entityStatus: RequestStatusType}
 export type TodoListActionsType = ReturnType<typeof removeTodolistAC>
                         | ReturnType <typeof addTodolistAC>
                         | ReturnType <typeof changeTodolistTitleAC>
                         | ReturnType<typeof getTodoListsAC>
                         | ReturnType<typeof changeTodolistStatusAC>
                         | setStatusACType
+                        | ReturnType<typeof changeEntityStatusAC>
+                        | ReturnType<typeof setErrorAC>
 
 const initialState:TodolistDomainType[] = []
 
 export const todolistsReducer = (state: TodolistDomainType[] = initialState , action: TodoListActionsType): TodolistDomainType[] => {
     switch (action.type) {
         case SET_TODOLISTS : {
-            return action.todoLists.map((td) => ({...td, filter: "all"}))
+            return action.todoLists.map((td) => ({...td, filter: "all", entityStatus: "idle"}))
         }
         case "REMOVE-TODOLIST" : {
             return state.filter((t) => t.id != action.id )
         }
         case "ADD-TODOLIST" : {
-            return [{...action.todoList, filter: "all"},...state]
+            return [{...action.todoList, filter: "all", entityStatus: "idle" },...state]
         }
         case "CHANGE-TODOLIST-TITLE" : {
             return state.map((t) => t.id === action.id ? {...t, title: action.title} : t )
@@ -39,6 +40,9 @@ export const todolistsReducer = (state: TodolistDomainType[] = initialState , ac
         }
         case "CHANGE-TODOLIST-STATUS" : {
             return state.map((t) => t.id === action.id ? {...t, filter: action.filter} : t)
+        }
+        case "CHANGE-ENTITY-STATUS" : {
+            return state.map((t) => t.id === action.id ? {...t, entityStatus: action.status} : t)
         }
         default: return state;
         // default: throw new Error("error, action type was not detected")
@@ -49,7 +53,10 @@ export const removeTodolistAC = (todolistID: string) => ({type: "REMOVE-TODOLIST
 export const addTodolistAC = (todoList: TodoListType) => ({ type: "ADD-TODOLIST", todoList } as const)
 export const changeTodolistTitleAC = (id: string, title: string ) => ({type: "CHANGE-TODOLIST-TITLE", id, title} as const)
 export const changeTodolistStatusAC = (id: string, filter: FilterValuesType) => ({type: "CHANGE-TODOLIST-STATUS", id, filter} as const)
+export const changeEntityStatusAC = (id: string, status: RequestStatusType) => ({type: "CHANGE-ENTITY-STATUS", id, status} as const)
 export const getTodoListsAC = (todoLists: TodoListType[]) => ({type: SET_TODOLISTS, todoLists} as const)
+
+
 
 
 export const getTodosTC = () => (dispatch:Dispatch)  => {
@@ -64,12 +71,33 @@ export const getTodosTC = () => (dispatch:Dispatch)  => {
 //     const res = await todolistAPI.getTodoList()
 //         dispatch(getTodoListsAC(res.data))
 // }
+enum ResultCode {
+    Ok = 0,
+    Error = 1,
+    Captcha = 10
+}
 export const deleteTodosTC = (id:string) => (dispatch:Dispatch)  => {
+
+    dispatch(changeEntityStatusAC(id,"loading"))
     dispatch(setStatusAC("loading"))
     todolistAPI.deleteTodoList(id).then((res) => {
-        dispatch(removeTodolistAC(id))
-        dispatch(setStatusAC("succeeded"))
+        if (res.data.resultCode === ResultCode.Ok) {
+            dispatch(removeTodolistAC(id))
+            dispatch(setStatusAC("succeeded"))
+        } else {
+            if (res.data.messages[0].length) {
+                dispatch(setErrorAC(res.data.messages[0]))
+            }
+            else {
+                dispatch(setErrorAC("Here's some error"))
+            }
+        }
     })
+        .catch((error) => {
+            dispatch(setStatusAC("failed"))
+            dispatch(changeEntityStatusAC(id,"failed"))
+            dispatch(setErrorAC(error.message))
+        })
 }
 export const postTodosTC = (title: string) => (dispatch:Dispatch)  => {
     dispatch(setStatusAC("loading"))

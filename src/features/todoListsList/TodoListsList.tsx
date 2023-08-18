@@ -14,9 +14,11 @@ import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import "./todolist/todolist.css"
 import {TasksStateType} from "../../app/App";
 import {Todolist} from "./todolist/Todolist";
+import {RequestStatusType} from "../../app/app-reducer";
 
 type TodoListsListType = {
     todolists: TodolistDomainType[]
+    entityStatus: RequestStatusType
 }
 export const TodoListsList: React.FC<TodoListsListType> = (props) => {
 
@@ -50,13 +52,17 @@ export const TodoListsList: React.FC<TodoListsListType> = (props) => {
         const action = putTitleTodosTC(id, title)
         dispatch(action)
     }, [dispatch])
-
+    const addTodolist = useCallback((title: string) => {
+        const action = postTodosTC(title)
+        dispatch(action)
+    }, [dispatch])
     useEffect(() => {
         dispatch(getTodosTC())
 
     }, [])
 
     return <div className="Todolist_div">
+        <AddItemForm addItem={addTodolist} disabled={props.entityStatus === "loading"}/>
         {props.todolists.map(tl => {
             let allTodolistTasks = tasks[tl.id];
             let tasksForTodolist = allTodolistTasks;
@@ -77,6 +83,7 @@ export const TodoListsList: React.FC<TodoListsListType> = (props) => {
                         removeTodolist={removeTodolist}
                         changeTaskTitle={changeTaskTitle}
                         changeTodolistTitle={changeTodolistTitle}
+                        entityStatus = {props.entityStatus}
                     />
                 </div>
             </>
