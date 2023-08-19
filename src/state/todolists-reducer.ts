@@ -1,7 +1,8 @@
 import {v1} from "uuid";
-import {todolistAPI, TodoListType} from "../api/todolist-api";
+import {ResultCode, todolistAPI, TodoListType} from "../api/todolist-api";
 import {Dispatch} from "redux";
 import {RequestStatusType, setErrorAC, setStatusAC, setStatusACType} from "../app/app-reducer";
+import {handleServerNetworkError} from "../utils/error-utils";
 
 export const SET_TODOLISTS = "SET-TODOLISTS"
 
@@ -71,11 +72,7 @@ export const getTodosTC = () => (dispatch:Dispatch)  => {
 //     const res = await todolistAPI.getTodoList()
 //         dispatch(getTodoListsAC(res.data))
 // }
-enum ResultCode {
-    Ok = 0,
-    Error = 1,
-    Captcha = 10
-}
+
 export const deleteTodosTC = (id:string) => (dispatch:Dispatch)  => {
 
     dispatch(changeEntityStatusAC(id,"loading"))
@@ -94,9 +91,8 @@ export const deleteTodosTC = (id:string) => (dispatch:Dispatch)  => {
         }
     })
         .catch((error) => {
-            dispatch(setStatusAC("failed"))
+            handleServerNetworkError(dispatch, error)
             dispatch(changeEntityStatusAC(id,"failed"))
-            dispatch(setErrorAC(error.message))
         })
 }
 export const postTodosTC = (title: string) => (dispatch:Dispatch)  => {

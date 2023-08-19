@@ -8,6 +8,7 @@ import {TaskStatuses, TaskType, todolistAPI, UpdateTaskModelType} from "../api/t
 import {AppActionsType, AppRootStateType} from "./store";
 import {TasksStateType} from "../app/App";
 import {setErrorAC, setStatusAC, setStatusACType} from "../app/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 
 
 export type ActionTasksType = ReturnType<typeof removeTaskAC>
@@ -110,26 +111,31 @@ export const changeStatusTaskTC = (todoListId:string, taskId: string, status: Ta
 
         todolistAPI.changeStatusTask(todoListId, taskId, model)
             .then((res) => {
-                dispatch(changeStatusTasksAC(todoListId, taskId, model))
-                dispatch(setStatusAC("succeeded"))
+                if (res.data.resultCode === 0) {
+                    dispatch(changeStatusTasksAC(todoListId, taskId, model))
+                    dispatch(setStatusAC("succeeded"))
+                } else {
+                    handleServerAppError(dispatch, res.data)
+                }
     })
+            .catch((err) => {
+                handleServerNetworkError(dispatch,err)
+            })
 }}
-export const postTasksTC = (todoListId:string, title: string) => (dispatch:Dispatch)  => {
+export const postTasksTC = (todoListId:string, title: string) => (dispatch:Dispatch<AppActionsType>)  => {
     dispatch(setStatusAC("loading"))
 
     todolistAPI.postTask(todoListId, title).then((res) => {
        if (res.data.resultCode === 0) {
            dispatch(addTaskAC(todoListId, res.data.data.item))
-
+           dispatch(setStatusAC("succeeded"))
+           console.log(res.data)
        } else {
-           if (res.data.messages[0].length) {
-               dispatch(setErrorAC(res.data.messages[0]))
-           }
-           else {
-               dispatch(setErrorAC("Here's some error"))
-           }
+           handleServerAppError(dispatch, res.data)
        }
-        dispatch(setStatusAC("idle"))
     })
+        .catch((err) => {
+            handleServerNetworkError(dispatch,err)
+        })
 }
 

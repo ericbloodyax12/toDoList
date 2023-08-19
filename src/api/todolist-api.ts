@@ -9,7 +9,7 @@ export type TodoListType =
                 "order": number
             }
 
-type ResponseType<T = {}> = {
+export type ResponseType<T = {}> = {
     resultCode: number
     messages: Array<string>
     fieldsErrors: Array<string>
@@ -46,14 +46,19 @@ export const todolistAPI = {
         return instance.get<GetTasksResponse>(`todo-lists/${todoListId}/tasks`)
     },
     deleteTasks (todoListId: string, taskId: string) {
-        return instance.delete<DeleteTasksResponse>(`todo-lists/${todoListId}/tasks/${taskId}`)
+        return instance.delete<ResponseType>(`todo-lists/${todoListId}/tasks/${taskId}`)
     },
     postTask (todoListId: string, title: string ) {
-        return instance.post<PostTaskResponse>(`todo-lists/${todoListId}/tasks`, {title})
+        return instance.post<ResponseType<{item: TaskType}>>(`todo-lists/${todoListId}/tasks`, {title})
     },
     changeStatusTask (todoListId: string, taskId: string, model: UpdateTaskModelType ) {
         return instance.put<ResponseType<{ item: TaskType }>, AxiosResponse<ResponseType<{ item: TaskType }>>, UpdateTaskModelType>(`todo-lists/${todoListId}/tasks/${taskId}`, model )
     },
+}
+export enum ResultCode {
+    Ok = 0,
+    Error = 1,
+    Captcha = 10
 }
 export enum TaskStatuses {
     New = 0,
@@ -89,25 +94,6 @@ export type GetTasksResponse = {
     totalCount : number
     items: TaskType[]
 }
-
-type DeleteTasksResponse = {
-    resultCode: number
-    messages: string[]
-    data: {
-        data:{
-            item:TaskType
-        }
-    }
-}
-type PostTaskResponse = {
-    data: {
-            item:TaskType
-    }
-
-    resultCode: number
-    messages: string[]
-}
-
 export type UpdateTaskModelType = {
     title:string,
     description: string,
