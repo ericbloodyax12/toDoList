@@ -2,7 +2,7 @@ import {v1} from "uuid";
 import {ResultCode, todolistAPI, TodoListType} from "../api/todolist-api";
 import {Dispatch} from "redux";
 import {RequestStatusType, setErrorAC, setStatusAC, setStatusACType} from "../app/app-reducer";
-import {handleServerNetworkError} from "../utils/error-utils";
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 
 export const SET_TODOLISTS = "SET-TODOLISTS"
 
@@ -98,9 +98,17 @@ export const deleteTodosTC = (id:string) => (dispatch:Dispatch)  => {
 export const postTodosTC = (title: string) => (dispatch:Dispatch)  => {
     dispatch(setStatusAC("loading"))
     todolistAPI.postTodoList(title).then((res) => {
-        dispatch(addTodolistAC(res.data.data.item))
-        dispatch(setStatusAC("succeeded"))
+        if (res.data.resultCode === 0) {
+            dispatch(addTodolistAC(res.data.data.item))
+            dispatch(setStatusAC("succeeded"))
+        } else {
+            handleServerAppError(dispatch, res.data)
+        }
+
     })
+        .catch((err) => {
+            handleServerNetworkError(dispatch, err)
+        })
 }
 export const putTitleTodosTC = (id: string, title: string) => (dispatch:Dispatch)  => {
     dispatch(setStatusAC("loading"))

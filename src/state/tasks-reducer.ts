@@ -9,6 +9,7 @@ import {AppActionsType, AppRootStateType} from "./store";
 import {TasksStateType} from "../app/App";
 import {setErrorAC, setStatusAC, setStatusACType} from "../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import axios, {AxiosError} from "axios";
 
 
 export type ActionTasksType = ReturnType<typeof removeTaskAC>
@@ -118,24 +119,41 @@ export const changeStatusTaskTC = (todoListId:string, taskId: string, status: Ta
                     handleServerAppError(dispatch, res.data)
                 }
     })
-            .catch((err) => {
+            .catch((err: AxiosError<{message: string}>) => {
+                const error = err.response ? err.response.data.message : err.message
                 handleServerNetworkError(dispatch,err)
             })
 }}
-export const postTasksTC = (todoListId:string, title: string) => (dispatch:Dispatch<AppActionsType>)  => {
+export const postTasksTC = (todoListId:string, title: string) => async (dispatch:Dispatch<AppActionsType>)  => {
     dispatch(setStatusAC("loading"))
-
-    todolistAPI.postTask(todoListId, title).then((res) => {
-       if (res.data.resultCode === 0) {
+    try {
+        const res = await todolistAPI.postTask(todoListId, title)
+        if (res.data.resultCode === 0) {
            dispatch(addTaskAC(todoListId, res.data.data.item))
            dispatch(setStatusAC("succeeded"))
-           console.log(res.data)
        } else {
            handleServerAppError(dispatch, res.data)
        }
-    })
-        .catch((err) => {
-            handleServerNetworkError(dispatch,err)
-        })
+    } catch (err) {
+        if (axios.isAxiosError<{message: string}>(err)) {
+            const error = err.response ? err.response.data.message : err.message
+            handleServerNetworkError(dispatch, {message:error})
+        }
+    }
 }
+
+
+
+//         .then((res) => {
+//        if (res.data.resultCode === 0) {
+//            dispatch(addTaskAC(todoListId, res.data.data.item))
+//            dispatch(setStatusAC("succeeded"))
+//        } else {
+//            handleServerAppError(dispatch, res.data)
+//        }
+//     })
+//         .catch((err) => {
+//             handleServerNetworkError(dispatch,err)
+//         })
+// }
 
