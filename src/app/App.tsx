@@ -16,6 +16,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LinearProgress from '@mui/material/LinearProgress'
 import {RequestStatusType} from "./app-reducer";
 import {CustomizedSnackbars} from "../components/ErrorSnackBar/ErrorSnackBar";
+import {Login} from "../features/login/login";
+import {Navigate, Route, Routes} from "react-router-dom";
 
 
 
@@ -55,9 +57,12 @@ export function App(props: AppWithReduxPropsType) {
                 </Toolbar>
                 {status === "loading" &&  <LinearProgress color="secondary" />}
             </AppBar>
-
-
-            <TodoListsList todolists={todolists} entityStatus={status}/>
+            <Routes>
+                <Route path = {"/"} element = {<TodoListsList todolists={todolists} entityStatus={status}/>}/>
+                <Route path = {"/login"} element = {<Login/>}/>
+                <Route path = {"/404"} element = {<h1>404 page is not found</h1>}/>
+                <Route path = {"*"} element = {<Navigate to= "/404"/>}/>
+            </Routes>
             <CustomizedSnackbars />
         </div>
     );
