@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 import {changeStatusTaskTC} from "../state/tasks-reducer";
+import {LoginType} from "../features/login/login";
+import {TodoListsList} from "../features/todoListsList/TodoListsList";
 
 export type TodoListType =
             {
@@ -25,7 +27,21 @@ const instance = axios.create({
 }
 })
 
+
+export const authAPI = {
+    me () {
+        return instance.get<ResponseType<UserDate>>("auth/me",
+        )
+    },
+    login (data: LoginType) {
+        return instance.post<ResponseType<{item:TodoListType}>,  AxiosResponse<ResponseType<{
+            item: TodoListType
+        }>>, LoginType>("auth/login", data)
+    }
+}
+
 export const todolistAPI = {
+
     getTodoList () {
         return instance.get<TodoListType[]>("todo-lists",
             )
@@ -55,6 +71,7 @@ export const todolistAPI = {
         return instance.put<ResponseType<{ item: TaskType }>, AxiosResponse<ResponseType<{ item: TaskType }>>, UpdateTaskModelType>(`todo-lists/${todoListId}/tasks/${taskId}`, model )
     },
 }
+
 export enum ResultCode {
     Ok = 0,
     Error = 1,
@@ -73,6 +90,12 @@ export enum TaskPriorities  {
     Hi,
     Urgently,
     Later
+}
+
+type UserDate = {
+    id: number,
+    email: string,
+    login: string
 }
 
 export type TaskType = {

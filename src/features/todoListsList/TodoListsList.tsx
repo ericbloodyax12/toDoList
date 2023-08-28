@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../state/store";
-import {changeStatusTaskTC, ChangeTitleTaskAC, deleteTasksTC, postTasksTC} from "../../state/tasks-reducer";
+import {changeStatusTaskTC, ChangeTitleTaskAC, deleteTasksTC, getTasksTC, postTasksTC} from "../../state/tasks-reducer";
 import {
     changeTodolistStatusAC,
     deleteTodosTC,
@@ -15,6 +15,7 @@ import "./todolist/todolist.css"
 import {TasksStateType} from "../../app/App";
 import {Todolist} from "./todolist/Todolist";
 import {RequestStatusType} from "../../app/app-reducer";
+import {Navigate} from "react-router-dom";
 
 type TodoListsListType = {
     todolists: TodolistDomainType[]
@@ -23,7 +24,13 @@ type TodoListsListType = {
 export const TodoListsList: React.FC<TodoListsListType> = (props) => {
 
     const dispatch = useAppDispatch();
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
     const tasks = useAppSelector<TasksStateType>((state) => state.tasks)
+
+    useEffect(() => {
+        if (!isLoggedIn) return;
+        dispatch(getTodosTC())
+    }, [])
     const removeTask = useCallback((todolistID: string, id: string) => {
         dispatch(deleteTasksTC(todolistID, id))
     }, [dispatch])
@@ -61,6 +68,7 @@ export const TodoListsList: React.FC<TodoListsListType> = (props) => {
 
     }, [])
 
+    if (!isLoggedIn) return <Navigate to={"/"}/>
     return <div className="Todolist_div">
         <AddItemForm addItem={addTodolist} disabled={props.entityStatus === "loading"}/>
         {props.todolists.map(tl => {

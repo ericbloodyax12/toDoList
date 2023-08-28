@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './app.css';
 import {useSelector} from "react-redux";
 import {AppRootStateType, useAppDispatch, useAppSelector} from "../state/store";
@@ -18,6 +18,7 @@ import {RequestStatusType} from "./app-reducer";
 import {CustomizedSnackbars} from "../components/ErrorSnackBar/ErrorSnackBar";
 import {Login} from "../features/login/login";
 import {Navigate, Route, Routes} from "react-router-dom";
+import {meTC} from "../features/login/auth-reducer";
 
 
 
@@ -35,6 +36,10 @@ export function App(props: AppWithReduxPropsType) {
     const status = useAppSelector<RequestStatusType>((state) => state.app.status )
     const dispatch = useAppDispatch();
     const todolists = useSelector<AppRootStateType, TodolistDomainType[]>((state) => state.todolists)
+
+    useEffect(() => {
+        dispatch(meTC());
+    },[])
 
     return (
         <div className="App">
