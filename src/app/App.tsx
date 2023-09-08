@@ -19,6 +19,7 @@ import {CustomizedSnackbars} from "../components/ErrorSnackBar/ErrorSnackBar";
 import {Login} from "../features/login/login";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {meTC} from "../features/login/auth-reducer";
+import {CircularProgress} from "@mui/material";
 
 
 
@@ -34,12 +35,20 @@ export type TasksStateType = {
 
 export function App(props: AppWithReduxPropsType) {
     const status = useAppSelector<RequestStatusType>((state) => state.app.status )
+    const isInitialized = useAppSelector<boolean>((state) => state.app.isInitialized )
     const dispatch = useAppDispatch();
     const todolists = useSelector<AppRootStateType, TodolistDomainType[]>((state) => state.todolists)
 
     useEffect(() => {
         dispatch(meTC());
     },[])
+
+    if (!isInitialized) {
+        return <div
+        style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+        <CircularProgress/>
+        </div>
+    }
 
     return (
         <div className="App">
