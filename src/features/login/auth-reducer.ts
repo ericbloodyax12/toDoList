@@ -3,7 +3,6 @@ import {setStatusACType, setStatusAC, setErrorAC, setInitialazedAC} from '../../
 import {LoginType} from "./login";
 import {authAPI} from "../../api/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import {changeStatusTasksAC} from "../../state/tasks-reducer";
 
 const initialState = {
     isLoggedIn: false
@@ -29,6 +28,22 @@ export const loginTC = (data: LoginType) => async (dispatch: Dispatch<ActionsTyp
         const res = await authAPI.login(data);
         if (res.data.resultCode === 0) {
             dispatch(setIsLoggedInAC(true))
+            dispatch(setStatusAC("succeeded"))
+        } else {
+            handleServerAppError(dispatch, res.data)
+        }
+    }
+    catch (er) {
+        const error = er as {message: string}
+        handleServerNetworkError(dispatch, error)
+    }
+}
+export const logOutTC = () => async (dispatch: Dispatch<ActionsType>) => {
+    try {
+        dispatch(setStatusAC('loading'))
+        const res = await authAPI.logOut();
+        if (res.data.resultCode === 0) {
+            dispatch(setIsLoggedInAC(false))
             dispatch(setStatusAC("succeeded"))
         } else {
             handleServerAppError(dispatch, res.data)

@@ -37,6 +37,9 @@ export const authAPI = {
         return instance.post<ResponseType<{item:TodoListType}>,  AxiosResponse<ResponseType<{
             item: TodoListType
         }>>, LoginType>("auth/login", data)
+    },
+    logOut () {
+        return instance.delete<ResponseType>("auth/login",)
     }
 }
 

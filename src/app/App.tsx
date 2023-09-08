@@ -18,7 +18,7 @@ import {RequestStatusType} from "./app-reducer";
 import {CustomizedSnackbars} from "../components/ErrorSnackBar/ErrorSnackBar";
 import {Login} from "../features/login/login";
 import {Navigate, Route, Routes} from "react-router-dom";
-import {meTC} from "../features/login/auth-reducer";
+import {logOutTC, meTC} from "../features/login/auth-reducer";
 import {CircularProgress} from "@mui/material";
 
 
@@ -36,8 +36,13 @@ export type TasksStateType = {
 export function App(props: AppWithReduxPropsType) {
     const status = useAppSelector<RequestStatusType>((state) => state.app.status )
     const isInitialized = useAppSelector<boolean>((state) => state.app.isInitialized )
+    const isLoggedIn = useAppSelector<boolean>((state) => state.auth.isLoggedIn )
     const dispatch = useAppDispatch();
     const todolists = useSelector<AppRootStateType, TodolistDomainType[]>((state) => state.todolists)
+
+    const logOutHandler = () => {
+        dispatch(logOutTC())
+    }
 
     useEffect(() => {
         dispatch(meTC());
@@ -49,6 +54,7 @@ export function App(props: AppWithReduxPropsType) {
         <CircularProgress/>
         </div>
     }
+
 
     return (
         <div className="App">
@@ -67,7 +73,7 @@ export function App(props: AppWithReduxPropsType) {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         News
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    {isLoggedIn && <Button color="inherit" onClick={logOutHandler}>Login</Button>}
                 </Toolbar>
                 {status === "loading" &&  <LinearProgress color="secondary" />}
             </AppBar>
