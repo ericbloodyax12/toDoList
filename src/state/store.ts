@@ -27,9 +27,8 @@ export const useAppDispatch = () =>  useDispatch<ThunkDispatchType>();
 export const useAppSelector: TypedUseSelectorHook<AppRootStateType> = useSelector
 // типизированный хук useSelector
 export type AppRootStateType = ReturnType <typeof rootReducer>
-// эт чтобы можно было в консоли браузера обращаться к store в любой момент
 
 export type AppActionsType = TodoListActionsType | ActionTasksType
-
+// эт чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore
 window.store = store

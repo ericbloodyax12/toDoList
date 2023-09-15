@@ -21,7 +21,7 @@ export type ResponseType<T = {}> = {
 
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.1/",
-    withCredentials: true,
+    withCredentials: true, // using cookies in the requests
     headers: {
     'API-KEY': '6e7aa82d-b9e4-4cf4-83d1-69d29e0aeaf2'
 }
