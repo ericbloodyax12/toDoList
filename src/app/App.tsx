@@ -73,7 +73,8 @@ export function App(props: AppWithReduxPropsType) {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         News
                     </Typography>
-                    {isLoggedIn && <Button color="inherit" onClick={logOutHandler}>Login</Button>}
+                    {isLoggedIn && <Button color="inherit" onClick={logOutHandler}>Logout</Button>}
+
                 </Toolbar>
                 {status === "loading" &&  <LinearProgress color="secondary" />}
             </AppBar>
