@@ -63,19 +63,14 @@ export const TodoListsList: React.FC<TodoListsListType> = (props) => {
         const action = postTodosTC(title)
         dispatch(action)
     }, [dispatch])
-    useEffect(() => {
-        dispatch(getTodosTC())
 
-    }, [])
 
-    if (!isLoggedIn) return <Navigate to={"/"}/>
-    
+     if (!isLoggedIn) return <Navigate to={"/login"}/>
+    console.log(props.todolists)
     return <div className="Todolist_div">
         <AddItemForm addItem={addTodolist} disabled={props.entityStatus === "loading"}/>
         {props.todolists.map(tl => {
             let allTodolistTasks = tasks[tl.id];
-            let tasksForTodolist = allTodolistTasks;
-
             return <>
 
                 <div>
@@ -83,7 +78,7 @@ export const TodoListsList: React.FC<TodoListsListType> = (props) => {
                         key={tl.id}
                         id={tl.id}
                         title={tl.title}
-                        tasks={tasksForTodolist}
+                        tasks={allTodolistTasks}
                         removeTask={removeTask}
                         changeFilter={changeFilter}
                         addTask={addTask}

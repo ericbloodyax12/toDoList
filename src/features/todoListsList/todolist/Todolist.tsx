@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from 'react';
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {useAppDispatch} from "../../../state/store";
 
-import {FilterValuesType} from "../../../state/todolists-reducer";
+import {FilterValuesType, getTodosTC} from "../../../state/todolists-reducer";
 import {TaskStatuses, TaskType} from "../../../api/todolist-api";
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {getTasksTC} from "../../../state/tasks-reducer";
@@ -35,7 +35,6 @@ export const Todolist = React.memo((props: PropsType) => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-
         dispatch(getTasksTC(props.id))
     }, [])
 

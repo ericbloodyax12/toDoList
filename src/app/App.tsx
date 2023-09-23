@@ -40,8 +40,10 @@ export function App(props: AppWithReduxPropsType) {
     const dispatch = useAppDispatch();
     const todolists = useSelector<AppRootStateType, TodolistDomainType[]>((state) => state.todolists)
 
+
     const logOutHandler = () => {
         dispatch(logOutTC())
+
     }
 
     useEffect(() => {
@@ -74,6 +76,8 @@ export function App(props: AppWithReduxPropsType) {
                         News
                     </Typography>
                     {isLoggedIn && <Button color="inherit" onClick={logOutHandler}>Logout</Button>}
+
+
 
                 </Toolbar>
                 {status === "loading" &&  <LinearProgress color="secondary" />}
