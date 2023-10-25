@@ -66,7 +66,7 @@ export const TodoListsList: React.FC<TodoListsListType> = (props) => {
 
 
      if (!isLoggedIn) return <Navigate to={"/login"}/>
-    console.log(props.todolists)
+
     return <div className="Todolist_div">
         <AddItemForm addItem={addTodolist} disabled={props.entityStatus === "loading"}/>
         {props.todolists.map(tl => {
