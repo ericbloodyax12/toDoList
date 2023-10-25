@@ -86,7 +86,7 @@ export function App(props: AppWithReduxPropsType) {
                 <Route path = {"/"} element = {<TodoListsList todolists={todolists} entityStatus={status}/>}/>
                 <Route path = {"/login"} element = {<Login/>}/>
                 <Route path = {"/404"} element = {<h1>Sorry 404 page is not found</h1>}/>
-                <Route path = {"*"} element = {<Navigate to= "/404"/>}/>
+                <Route path = {"*"} element = {<Navigate to= "/login"/>}/>
             </Routes>
             <CustomizedSnackbars />
         </div>
